@@ -1,3 +1,12 @@
+const socket = io();
+socket.on('message', ({ author, content }) => addMessage(author, content));
+socket.on('newUser', (user) =>
+  addMessage('Chat Bot', `<i>${user} has joined the conversation!</i>`)
+);
+socket.on('userLeft', (user) =>
+  addMessage('Chat Bot', `<i>${user} has left the conversation... :(</i>`)
+);
+
 const loginForm = document.getElementById('welcome-form');
 const messagesSection = document.getElementById('messages-section');
 const messagesList = document.getElementById('messages-list');
@@ -13,6 +22,7 @@ const login = e => {
     userName = userNameInput.value;
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
+    socket.emit('join', { author: userName, id: socket.id });
   } else {
     alert('Login is required!');
   }
@@ -32,8 +42,15 @@ const addMessage = (author, content) => {
 
 const sendMesage = e => {
   e.preventDefault();
+
+  let messageContent = messageContentInput.value;
+
   if (messageContentInput.value.length > 0) {
     addMessage(userName, messageContentInput.value);
+    socket.emit('message', {
+      author: userName,
+      content: messageContent,
+    });
     messageContentInput.value = '';
   } else {
     alert('Add message.');

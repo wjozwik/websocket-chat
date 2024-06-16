@@ -6,7 +6,8 @@
   "repository": "git@github.com:wjozwik/websocket-chat.git",
   "author": "Wojciech Jozwik <wj.telefon@gmail.com>",
   "dependencies": {
-    "express": "4.17.1"
+    "express": "4.17.1",
+    "socket.io": "4.7.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
